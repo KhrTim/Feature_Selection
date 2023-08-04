@@ -6,7 +6,7 @@ end
 file_list = dir('data/*.mat');
 fs_done = dir('result/*.mat');
 load("exp_setting.mat");
-for k = 5:length(file_list)
+for k = 1:length(file_list)
     file_name = file_list(k).name;
     file_name = replace(file_name, '.mat', '_exp.mat');
     loaded = false;
@@ -24,7 +24,7 @@ for k = 5:length(file_list)
     fprintf('%d Start\n', k);
     fea = load(file_list(k).name, 'fea').fea;
     gnd = load(file_list(k).name, 'gnd').gnd;
-    for m = 10:length(param_struct)
+    for m = 1:length(param_struct)
         if loaded && ~strcmp(param_struct(m).alg, 'UDFS') && ~strcmp(param_struct(m).alg, 'PROP') && ~strcmp(param_struct(m).alg, 'VCSDFS')
             continue;
         end
