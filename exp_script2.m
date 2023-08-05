@@ -6,7 +6,7 @@ end
 file_list = dir('data/*.mat');
 fs_done = dir('result/*.mat');
 load("exp_setting.mat");
-for k = 1:length(file_list)
+for k = 5:length(file_list)
     file_name = file_list(k).name;
     file_name = replace(file_name, '.mat', '_exp.mat');
     loaded = false;
@@ -27,12 +27,17 @@ for k = 1:length(file_list)
     for m = 1:length(param_struct)
         if loaded && ~strcmp(param_struct(m).alg, 'UDFS') && ~strcmp(param_struct(m).alg, 'PROP') && ~strcmp(param_struct(m).alg, 'VCSDFS')
             continue;
+        end      
+        if strcmp(param_struct(m).alg,'PROP')
+            param_struct(m).param = [1;2;3;4;5];
+        end
+        if strcmp(param.struct(m).alg, 'UDFS')
+            param_struct(m).param = make_param_mat([0.001, 0.01, 0.1, 1, 10, 100, 1000], 2);
+            param_struct(m).fea = zeros(size(param_struct(idx).param, 1), max_fea);
+            param_struct(m).time = zeros(size(param_struct(idx).param, 1), 1);
         end
         if size(fea, 2) < max_fea
             param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(fea, 2));
-        end
-        if strcmp(param_struct(m).alg,'PROP')
-            param_struct(m).param = [1;2;3;4;5];
         end
         alg = param_struct(m).alg;
         temp_param = param_struct(m).param;
@@ -40,7 +45,7 @@ for k = 1:length(file_list)
         temp_time = param_struct(m).time;
         fea = normalize(fea);
         
-        parfor n = 1:length(temp_param)
+        for n = 1:length(temp_param)
            tic
            idx =  ufs_alg(alg, fea, gnd, max_fea, temp_param(n,:));
            temp_fea(n, :) = idx;
