@@ -31,10 +31,10 @@ for k = 5:length(file_list)
         if strcmp(param_struct(m).alg,'PROP')
             param_struct(m).param = [1;2;3;4;5];
         end
-        if strcmp(param.struct(m).alg, 'UDFS')
+        if strcmp(param_struct(m).alg, 'UDFS')
             param_struct(m).param = make_param_mat([0.001, 0.01, 0.1, 1, 10, 100, 1000], 2);
-            param_struct(m).fea = zeros(size(param_struct(idx).param, 1), max_fea);
-            param_struct(m).time = zeros(size(param_struct(idx).param, 1), 1);
+            param_struct(m).fea = zeros(size(param_struct(m).param, 1), max_fea);
+            param_struct(m).time = zeros(size(param_struct(m).param, 1), 1);
         end
         if size(fea, 2) < max_fea
             param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(fea, 2));
@@ -45,7 +45,7 @@ for k = 5:length(file_list)
         temp_time = param_struct(m).time;
         fea = normalize(fea);
         
-        for n = 1:length(temp_param)
+        parfor n = 1:length(temp_param)
            tic
            idx =  ufs_alg(alg, fea, gnd, max_fea, temp_param(n,:));
            temp_fea(n, :) = idx;
