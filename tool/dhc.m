@@ -36,7 +36,7 @@ pur_res(1, 2) = std(pur);
 c_res(1, 1) = mean(c);
 c_res(1, 2) = std(c);
 ffei_res = ffei(X, X_origin);
-ent_res = ent_s(X);
+ent_res = ent(X);
 nmis = nmi_s(X, Y);
 eval_res = struct('sil', sil_res, 'dbi', dbi_res, ...
     'acc', acc_res, 'nmi', nmi_res, 'c', c_res, 'ffei', ffei_res, 'ent', ent_res, 'nmi_s', nmis, 'pur', pur_res);
