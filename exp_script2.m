@@ -6,7 +6,8 @@ end
 file_list = dir('data/*.mat');
 fs_done = dir('result/*.mat');
 load("exp_setting.mat");
-for k = 5:length(file_list)
+%for k = 5:10
+for k = 7:length(file_list)
     file_name = file_list(k).name;
     file_name = replace(file_name, '.mat', '_exp.mat');
     loaded = false;

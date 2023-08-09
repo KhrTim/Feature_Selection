@@ -16,7 +16,8 @@ save_dir = './result_fs/';
 rep_size = 10;
 max_fs_size = 100;
 pctRunOnAll warning('off');
-for k = 1:length(data_list)
+%for k = 1:6
+for k = 7:length(fs_list)
     k
     load(data_list{k});
     data_name = data_list{k}(1:end-4);
