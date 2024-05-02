@@ -27,7 +27,11 @@ while (iter <= NITER)
     A = XX*W;
     denW = A*(W')*A + rho*ones(d,d)*W;
     fracW = numW./denW;
-    fracW = nthroot(fracW,4);
+    try
+        fracW = nthroot(fracW,4);
+    catch
+        break;
+    end
     W = W.*fracW;
     % Compute the objective function
     XW = X*W;

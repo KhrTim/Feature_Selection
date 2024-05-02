@@ -8,7 +8,10 @@ file_list = dir('data/*.mat');
 parfor k = 1:length(file_list)
 %for k = 7:7
     [max_fea, param_struct] = load_expset();
-    fprintf('%d Start\n', k);  
+    fprintf('%d Start\n', k);
+    if exist([output_dir file_list(k).name], 'file')
+        continue;
+    end
     for m = 1:length(param_struct)
     %for m = 2:2
         fea = load([data_dir file_list(k).name], 'fea').fea;
