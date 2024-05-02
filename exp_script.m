@@ -1,6 +1,6 @@
 clear;
 data_dir = './data/';
-output_dir = './result_rebutal/';
+output_dir = './result/';
 if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
@@ -21,10 +21,10 @@ parfor k = 1:length(file_list)
         if size(fea, 2) < max_fea
             param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(fea, 2));
         end
+        alg = param_struct(m).alg;
         if strcmp(alg, 'FMIUFS') == 1
             fea = normalize(fea);
         end
-        alg = param_struct(m).alg;
         temp_param = param_struct(m).param;
         temp_fea = param_struct(m).fea;
         temp_time = param_struct(m).time;
