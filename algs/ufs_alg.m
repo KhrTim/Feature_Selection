@@ -48,8 +48,11 @@ switch name
         idx = u2fs(X, c_num, m, {});
         idx = idx';
     case 'FMIUFS'
-        idx = FMIUFS(X, param(1,1));
-        idx = idx(1, 1:m);
+        idx = FMIUFS(X, param(1,1), m);
+    case 'FRUAR'
+        idx = FRUAR(X, param(1,1), m);
+    case 'UAR_HKCMI'
+        idx=uar_HKCMI(X,param(1, 1),param(1, 2));
     case 'IUFS'
         idx = iufs(X, m);
         idx = idx';
@@ -58,29 +61,11 @@ switch name
         idx = idx(1:m, 1);
         idx = idx';
     case 'PROP'
-        switch param(1, 1)
-            case 1
-        % case 1 class size ew discretize
-                X_dis = discretize_width(X, c_num);
-                idx = transpose(proposed(X_dis, m));
-        % case 2 class size ef discretize
-            case 2
-                X_dis = discretize_freq(X, c_num);
-                idx = transpose(proposed(X_dis, m));
-            case 3
-                % case 3 10 bin ew discretize
-                X_dis = discretize_width(X, 10);
-                idx = transpose(proposed(X_dis, m));
-            case 4
-                % case 4 10 bin ef discretize
-                X_dis = discretize_freq(X, 10);
-                idx = transpose(proposed(X_dis, m));
-            case 5
-                % case 5 laim discretize
-                Y_copy = double((Y==1:c_num));
-                X_dis = discretize_laim(X, Y_copy);
-                idx = transpose(proposed(X_dis, m));
-        end
+        idx = transpose(proposed(X, m));
+    case 'PROPQ'
+        idx = transpose(proposed_quad(X, m));
+    case 'PROP_REV'
+        idx = transpose(proposed_reverse(X, m));
     case 'RANK'
         idx = rankufs(X, c_num, param(1, 1), param(1, 2), param(1, 3));
         idx = idx(1:m, 1);

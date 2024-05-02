@@ -5,7 +5,7 @@
 %%Yuan Zhong, Chen Hongmei, Li Tianrui, Yu Zeng, Sang Binbin, and Luo Chuan. 
 %%Unsupervised attribute reduction for mixed data based on fuzzy rough sets, Information Science,2021, 572:67-87.
 %%Uploaded by Yuan Zhong on May 29, 2021. E-mail:yuanzhong2799@foxmail.com.
-function select_feature=FRUAR(data,lammda)
+function select_feature=FRUAR(data,lammda, max_num)
 
 
 %%%input:
@@ -45,7 +45,7 @@ red=[];
 x=0;
 base=ones(row);
 B=1:attrinu;
-for j=attrinu:-1:1
+while length(red) < max_num +2
     sig=[];
     for l_1=1:length(B)
        r2=eval(['ssr' num2str(B(l_1))]);
@@ -75,9 +75,5 @@ for j=attrinu:-1:1
         break;
     end
 end
-if length(red)==attrinu
-   select_feature=red(1:end-1);
-else
-   select_feature=red;
-end
+select_feature = red;
 end

@@ -22,7 +22,7 @@
 %%% IEEE Transactions on Fuzzy Systems, 2021.
 %%% Uploaded by Yuan Zhong on Sep. 29, 2021. E-mail:yuanzhong2799@foxmail.com. 
 
-function select_feature=FMIUFS(data,lammda)
+function select_feature=FMIUFS(data,lammda, max_num)
 
 %%input
 % data is data matrix, where rows for objects and columns for attributes without decision attribute. 
@@ -42,19 +42,25 @@ for j=1:attrinu
     end
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%Compute the relation matrix%%%%%%%%%%%%%%%%%%%%%%%%%
- for i=1:attrinu
-     col=i;
-     r=[];
-     eval(['ssr' num2str(col) '=[];']);
-      for j=1:row      
-          a=data(j,col);
-          x=data(:,col);       
-          for m=1:length(x)
-              r(j,m)=fmiufs_kersim(a,x(m),delta(i));
-          end
-      end
-    eval(['ssr' num2str(col) '=r;']);
- end      
+for i=1:attrinu
+    col=i;
+    r=zeros(row, row);
+    eval(['ssr' num2str(col) '=[];']);
+    parfor j=1:row      
+        a=data(j,col);
+        x=data(:,col);       
+        for m=1:row
+            r(j,m)=fmiufs_kersim(a,x(m),delta(i));
+        end
+    end
+eval(['ssr' num2str(col) '=r;']);
+end
+ssr_length = length(who('ssr*'));
+cell_ssrs = {};
+for i = 1:ssr_length
+    cell_ssrs{i} = eval(['ssr' num2str(i)]);
+end
+clear -regexp ^ssr
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%UFS based on fuzzy mutual information%%%%%%%%%%%
 unSelect_Fea=[];
 Select_Fea=[];
@@ -65,22 +71,25 @@ E=zeros(1,attrinu);
 Joint_E=zeros(attrinu,attrinu);
 MI=zeros(attrinu,attrinu);
 
-for j=1:attrinu
-     r=eval(['ssr' num2str(j)]);
+parfor j=1:attrinu
+     r=cell_ssrs{j};
      E(j)=entropy(r);
 end
 
 for i=1:attrinu
-       ri=eval(['ssr' num2str(i)]);
-    for j=1:i
-        rj=eval(['ssr' num2str(j)]);
+    ri = cell_ssrs{i};
+    parfor j=1:i
+        rj=cell_ssrs{j};
         Joint_E(i,j)=entropy(min(ri,rj));
-        Joint_E(j,i)=Joint_E(i,j);
         MI(i,j)=E(i)+E(j)-Joint_E(i,j);
-        MI(j,i)=MI(i,j);
     end
 end
-
+Joint_E = Joint_E + Joint_E';
+MI = MI + MI';
+for i = 1:attrinu
+    Joint_E(i,i) = Joint_E(i,i)/2;
+    MI(i,i) = MI(i,i)/2;
+end
 Ave_MI=mean(MI,1);
 
 [x1,n1]=sort(Ave_MI,'descend');
@@ -96,12 +105,16 @@ while ~isempty(unSelect_Fea)
              -E(unSelect_Fea(i)))/E(Select_Fea(j))*Ave_MI(Select_Fea(j));
         end
     end
-        [max_sig,max_tem]=max(Ave_MI(unSelect_Fea)'-mean(Red,2));
-        sig=[sig max_sig];
-        Select_Fea=[Select_Fea unSelect_Fea(max_tem)];
-        unSelect_Fea=setdiff(unSelect_Fea,unSelect_Fea(max_tem));
+    [max_sig,max_tem]=max(Ave_MI(unSelect_Fea)'-mean(Red,2));
+    sig=[sig max_sig];
+    Select_Fea=[Select_Fea unSelect_Fea(max_tem)];
+    unSelect_Fea=setdiff(unSelect_Fea,unSelect_Fea(max_tem));
+    if length(Select_Fea) == max_num
+        break;
+    end
 end
 select_feature=Select_Fea;
+end
 
 function kersim=fmiufs_kersim(a,x,e)
 if abs(a-x)>e
@@ -117,6 +130,7 @@ else
         kersim=1-abs(a-x);    
     end
 end
+end
 
 function [S]=entropy(M)
 [a,b]=size(M);
@@ -127,3 +141,6 @@ for i=1:a
     Si=0;
 end
 S=K;
+end
+
+ 

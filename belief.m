@@ -1,2 +1,2 @@
-exp_script2
+exp_script
 fs_script

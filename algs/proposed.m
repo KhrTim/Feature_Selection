@@ -20,7 +20,9 @@ end
 
 ff_ent = ff_ent + ff_ent'; 
 
-[~, res(1,1)] = max(f_ent);
+first_vec = sum(ff_ent, 2);
+first_vec = first_vec - f_ent;
+[~, res(1,1)] = max(first_vec);
 
 for k =2:max_feat
     t_rel = zeros(fcol, 1);

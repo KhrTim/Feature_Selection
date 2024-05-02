@@ -78,7 +78,7 @@ end
 
 % Sigma value to use
 if ~isfield(options,'sigma')
-    sigma = 'highdim';
+    sigma = 'mean';
 else
     sigma = lower(options.sigma);
 end

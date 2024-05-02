@@ -1,24 +1,35 @@
 clear;
-output_dir = './result/';
+data_dir = './data/';
+output_dir = './result_rebutal/';
 if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
 file_list = dir('data/*.mat');
-for k = 1:length(file_list)
-    load exp_setting.mat
-    fprintf('%d Start\n', k);
-    fea = load(file_list(k).name, 'fea').fea;
-    gnd = load(file_list(k).name, 'gnd').gnd;
+parfor k = 1:length(file_list)
+%for k = 7:7
+    [max_fea, param_struct] = load_expset();
+    fprintf('%d Start\n', k);  
     for m = 1:length(param_struct)
+    %for m = 2:2
+        fea = load([data_dir file_list(k).name], 'fea').fea;
+        gnd = load([data_dir file_list(k).name], 'gnd').gnd;
+        num_c = length(unique(gnd));
+        cate_flag = load([data_dir file_list(k).name], 'cate_flag').cate_flag;  
+        if cate_flag == 0
+            fea = discretize_width(fea, 10);
+        end
         if size(fea, 2) < max_fea
             param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(fea, 2));
+        end
+        if strcmp(alg, 'FMIUFS') == 1
+            fea = normalize(fea);
         end
         alg = param_struct(m).alg;
         temp_param = param_struct(m).param;
         temp_fea = param_struct(m).fea;
         temp_time = param_struct(m).time;
-        fea = normalize(fea);
-        parfor n = 1:length(temp_param)
+
+        for n = 1:size(temp_param, 1)
            tic
            idx =  ufs_alg(alg, fea, gnd, max_fea, temp_param(n,:));
            temp_fea(n, :) = idx;
@@ -27,13 +38,20 @@ for k = 1:length(file_list)
         param_struct(m).fea = temp_fea;
         param_struct(m).time = temp_time;
         fprintf('%s finish\n', alg);
-        file_name = file_list(k).name;
-        file_name = replace(file_name, '.mat', '_exp.mat'); 
-        save_dir = strcat(output_dir, file_name);
-        save(save_dir, 'param_struct');
+   
     end
+    file_name = file_list(k).name;
+    save_dir = strcat(output_dir, file_name);
+    save_file(save_dir, param_struct);
     fprintf('%d finish\n', k);
 end
-!git add .
-!git commit -m "results"
-!git push origin master
+
+function [m, p] = load_expset()
+load("exp_setting.mat");
+m = max_fea;
+p = param_struct;
+end
+
+function save_file(save_dir, param_struct)
+    save(save_dir, 'param_struct');
+end
