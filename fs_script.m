@@ -14,24 +14,24 @@ save_dir = './result_fs/';
 
 
 rep_size = 10;
-max_fs_size = 300;
+max_fs_size = 200;
 pctRunOnAll warning('off');
 %for k = 1:6
-for k = 7:length(fs_list)
+for k = 1:length(fs_list)
     k
-    load(data_list{k});
+    load([data_dir data_list{k}]);
     data_name = data_list{k}(1:end-4);
-    load(strcat(data_name, '_exp.mat'));
+    load([fs_dir strcat(data_name, '.mat')]);
     [~, col] = size(fea);
     max_col = min(max_fs_size, col);
-    fs_size = 10:10:max_col;
-    res = struct('alg', {}, 'uni', {}, 'ent', {},...
+    fs_size = 1:max_col;
+    res = struct('alg', {}, 'pdp', {}, 'ent', {},...
         'acc_nb', {}, 'acc_nb_s', {}, 'acc_tree', {}, 'acc_tree_s', {}, ...
         'nmi', {}, 'dis', {}, 'dis_s', {});
     for alg_idx = 1:length(param_struct)
         alg = param_struct(alg_idx).alg;
         res(alg_idx).alg = alg;
-        table_uni = zeros(1, length(fs_size));
+        table_pdp = zeros(1, length(fs_size));
         table_ent = zeros(1, length(fs_size));
         table_acc_nb = zeros(1, length(fs_size));
         table_acc_nb_s = zeros(1, length(fs_size));
@@ -41,16 +41,16 @@ for k = 7:length(fs_list)
         table_dis = zeros(1, length(fs_size));
         table_dis_s = zeros(1, length(fs_size));
         fs_list = param_struct(alg_idx).fea;       
-        for fs_idx = 1:length(fs_size)
+        parfor fs_idx = 1:length(fs_size)
             fs = fs_size(fs_idx);
             X_fs = fea(:, fs_list(1:fs));
-            table_uni(1, fs_idx) = uniqueness(X_fs);
+            table_pdp(1, fs_idx) = uniqueness(X_fs);
             table_ent(1, fs_idx) = ent_s(X_fs);
             [table_acc_nb(1, fs_idx), table_acc_nb_s(1, fs_idx), table_acc_tree(1, fs_idx), table_acc_tree_s(1, fs_idx)] = acc_nb_tree(X_fs, gnd);
             table_nmi(1, fs_idx) = nmi_s(X_fs, gnd);
             [table_dis(1, fs_idx), table_dis_s(1, fs_idx)] = descriacc(X_fs);
         end
-        res(alg_idx).uni = table_uni;
+        res(alg_idx).pdp = table_pdp;
         res(alg_idx).ent = table_ent;
         res(alg_idx).acc_nb = table_acc_nb;
         res(alg_idx).acc_nb_s = table_acc_nb_s;
