@@ -1,3 +1,3 @@
 function res = nmi_s(X, Y)
-res = h(X) + h(Y) - h([X, Y]);
+res = p_entropy(X) + p_entropy(Y) - p_entropy([X, Y]);
 end

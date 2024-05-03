@@ -16,7 +16,7 @@ if ~exist(save_dir, 'dir')
 end
 
 rep_size = 10;
-max_fs_size = 200;
+max_fs_size = 300;
 pctRunOnAll warning('off');
 %for k = 1:6
 for k = 1:length(fs_list)
@@ -43,7 +43,7 @@ for k = 1:length(fs_list)
         table_dis = zeros(1, length(fs_size));
         table_dis_s = zeros(1, length(fs_size));
         fs_list = param_struct(alg_idx).fea;       
-        parfor fs_idx = 1:length(fs_size)
+        parfor fs_idx = 2:length(fs_size)
             fs = fs_size(fs_idx);
             X_fs = fea(:, fs_list(1:fs));
             table_pdp(1, fs_idx) = uniqueness(X_fs);
