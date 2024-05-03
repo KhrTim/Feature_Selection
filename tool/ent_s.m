@@ -1,4 +1,4 @@
 function res = ent_s(X)
-res = h(X);
+res = p_entropy(X);
 
 end

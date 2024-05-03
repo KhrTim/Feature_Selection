@@ -17,7 +17,7 @@ end
 
 rep_size = 10;
 max_fs_size = 200;
-pctRunOnAll warning('off');
+%pctRunOnAll warning('off');
 %for k = 1:6
 for k = 1:length(fs_list)
     k
