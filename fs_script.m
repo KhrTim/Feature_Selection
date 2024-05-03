@@ -42,8 +42,11 @@ for k = 1:length(fs_list)
         table_nmi = zeros(1, length(fs_size));
         table_dis = zeros(1, length(fs_size));
         table_dis_s = zeros(1, length(fs_size));
-        fs_list = param_struct(alg_idx).fea;       
-        parfor fs_idx = 2:length(fs_size)
+        fs_list = param_struct(alg_idx).fea;
+        if cate_flag == 0
+            fea = discretize_width(fea, 20);
+        end
+        parfor fs_idx = 1:length(fs_size)
             fs = fs_size(fs_idx);
             X_fs = fea(:, fs_list(1:fs));
             table_pdp(1, fs_idx) = uniqueness(X_fs);

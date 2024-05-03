@@ -8,7 +8,7 @@ n = size(X,1);
 
 % Get the number of unique vectors
 uni_vec = unique(X, "rows");
-uni = length(uni_vec);
+uni = size(uni_vec,1);
 res = uni/n;
 
 end
