@@ -11,7 +11,9 @@ fs_list = dir([fs_dir, '*.mat']);
 fs_list = {fs_list.name};
 
 save_dir = './result_fs/';
-
+if ~exist(save_dir, 'dir')
+    mkdir(output_dir);
+end
 
 rep_size = 10;
 max_fs_size = 200;
