@@ -12,7 +12,7 @@ fs_list = {fs_list.name};
 
 save_dir = './result_fs/';
 if ~exist(save_dir, 'dir')
-    mkdir(output_dir);
+    mkdir(save_dir);
 end
 
 rep_size = 10;
