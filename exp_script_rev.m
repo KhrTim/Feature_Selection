@@ -5,7 +5,7 @@ if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
 file_list = dir('data/*.mat');
-parfor k = 1:length(file_list)
+parfor k = 6:length(file_list)
 %for k = 7:7
     [max_fea, param_struct] = load_expset();
     fprintf('%d Start\n', k);
@@ -23,6 +23,7 @@ parfor k = 1:length(file_list)
     end
     if size(fea, 2) < max_fea
         param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(fea, 2));
+        max_fea = size(fea, 2);
     end
     temp_param = param_struct(m).param;
     temp_fea = param_struct(m).fea;
@@ -36,9 +37,7 @@ parfor k = 1:length(file_list)
     end
     param_struct(m).fea = temp_fea;
     param_struct(m).time = temp_time;
-    fprintf('%s finish\n', alg);
    
-    end
     file_name = file_list(k).name;
     save_dir = strcat(output_dir, file_name);
     save_file(save_dir, param_struct);

@@ -21,7 +21,7 @@ end
 ff_ent = ff_ent + ff_ent'; 
 
 % quadratic prog
-x = quadprog(ff_ent, 0, [], [], ones(1, fcol) , 1, zeros(fcol,1), ones(fcol,1), [], optimset('Display','off'));
+x = quadprog(ff_ent, zeros(fcol,1), [], [], ones(1, fcol) , 1, zeros(fcol,1), ones(fcol,1), [], optimset('Display','off'));
 [~,idx] = sort(x, 'descend');
 res = idx(1:max_feat);
 res = res';
