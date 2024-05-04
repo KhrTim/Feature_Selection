@@ -44,7 +44,7 @@ for k = 1:length(fs_list)
         table_dis_s = zeros(1, length(fs_size));
         fs_list = param_struct(alg_idx).fea;
         if cate_flag == 0
-            fea = discretize_width(fea, 20);
+            fea = discretize_width(fea, 10);
         end
         parfor fs_idx = 1:length(fs_size)
             fs = fs_size(fs_idx);
