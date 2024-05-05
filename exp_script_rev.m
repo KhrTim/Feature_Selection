@@ -5,7 +5,7 @@ if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
 file_list = dir('data/*.mat');
-parfor k = 6:length(file_list)
+parfor k = 1:length(file_list)
 %for k = 7:7
     [max_fea, param_struct] = load_expset();
     fprintf('%d Start\n', k);
