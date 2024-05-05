@@ -6,11 +6,11 @@ data_dir = './data/';
 data_list = dir([data_dir, '*.mat']);
 data_list = {data_list.name};
 
-fs_dir = './result_rev/';
+fs_dir = './result/';
 fs_list = dir([fs_dir, '*.mat']);
 fs_list = {fs_list.name};
 
-save_dir = './result_fs_rev/';
+save_dir = './result_fs/';
 if ~exist(save_dir, 'dir')
     mkdir(save_dir);
 end
@@ -29,7 +29,7 @@ for k = 1:length(fs_list)
     res = struct('alg', {}, 'pdp', {}, 'ent', {},...
         'acc_nb', {}, 'acc_nb_s', {}, 'acc_tree', {}, 'acc_tree_s', {}, ...
         'nmi', {}, 'dis', {}, 'dis_s', {});
-    for alg_idx = 5:length(param_struct)
+    for alg_idx = 1:length(param_struct)
         alg = param_struct(alg_idx).alg;
         res(alg_idx).alg = alg;
         table_pdp = zeros(1, length(fs_size));

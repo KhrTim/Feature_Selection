@@ -1,2 +1,0 @@
-exp_script
-fs_script
