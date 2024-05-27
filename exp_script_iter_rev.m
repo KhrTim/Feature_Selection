@@ -31,7 +31,7 @@ parfor k = 1:length(file_list)
 
     for n = 1:size(temp_param, 1)
        tic
-       idx =  proposed_fd(fea, max_fea);
+       idx =  proposed_reverse(fea, max_fea);
        temp_fea(n, :) = idx;
        temp_time(n,1) = toc;
     end
