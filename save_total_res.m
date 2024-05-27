@@ -12,7 +12,7 @@ alg_list = {};
 % Loop through each data file and load the data
 alg_size = 5;
 data_size = length(res_list);
-min_pdp = zeros(data_size, alg_size);
+min_pdp = ones(data_size, alg_size) .* 500;
 
 total_res = struct('pdp', zeros(data_size, alg_size), 'ent', zeros(data_size, alg_size), ...
     'acc_nb', zeros(data_size, alg_size), 'acc_nb_s', zeros(data_size, alg_size), ...
@@ -47,6 +47,15 @@ for k = 1:data_size
             end
         end
     end
+
+    pdp_mat = [pdp_mat(end, :); pdp_mat(1:end-1, :)];
+    ent_mat = [ent_mat(end, :); ent_mat(1:end-1, :)];
+    nb_acc_mat = [nb_acc_mat(end, :); nb_acc_mat(1:end-1, :)];
+    nb_acc_s_mat = [nb_acc_s_mat(end, :); nb_acc_s_mat(1:end-1, :)];
+    tree_acc_mat = [tree_acc_mat(end, :); tree_acc_mat(1:end-1, :)];
+    tree_acc_s_mat = [tree_acc_s_mat(end, :); tree_acc_s_mat(1:end-1, :)];
+    nmi_mat = [nmi_mat(end, :); nmi_mat(1:end-1, :)];
+
     total_res(k).pdp = pdp_mat;
     total_res(k).ent = ent_mat;
     total_res(k).acc_nb = nb_acc_mat;
@@ -56,4 +65,6 @@ for k = 1:data_size
     total_res(k).nmi = nmi_mat;
 end
 
-save('total_res.mat', 'total_res', 'min_pdp');
+min_pdp = [min_pdp(:, end), min_pdp(:, 1:end-1)];
+res_list = res_list';
+save('total_res.mat', 'total_res', 'min_pdp', 'res_list');
