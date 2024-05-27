@@ -1,7 +1,7 @@
 clear;
 
 data_dir = './data/';
-res_dir = './result_fs_iter/';
+res_dir = './result_fs_iter_fd/';
 
 % Get the list of data files (*.mat)
 res_list = dir([res_dir, '*.mat']);
