@@ -6,11 +6,11 @@ data_dir = './data/';
 data_list = dir([data_dir, '*.mat']);
 data_list = {data_list.name};
 
-fs_dir = './result_rev/';
+fs_dir = './result_iter/';
 fs_list = dir([fs_dir, '*.mat']);
 fs_list = {fs_list.name};
 
-save_dir = './result_fs_rev/';
+save_dir = './result_fs_iter/';
 if ~exist(save_dir, 'dir')
     mkdir(save_dir);
 end
