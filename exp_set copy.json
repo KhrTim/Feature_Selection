@@ -1,49 +1,6 @@
 {
     "param_struct": [
         {
-            "alg": "MCFS",
-            "param": 0
-        },
-        {
-            "alg": "LRPFS",
-            "param": [
-                1,
-                1,
-                5
-            ]
-        },
-        {
-            "alg": "FSDK",
-            "param": [
-                5,
-                5
-            ]
-        },
-        {
-            "alg": "SLNMF",
-            "param": [
-                1,
-                1,
-                1,
-                1
-            ]
-        },
-        {
-            "alg": "GRSSLSF",
-            "param": [
-                1,
-                1,
-                1
-            ]
-        },
-        {
-            "alg": "RAFG",
-            "param": [
-                1,
-                1
-            ]
-        },
-        {
             "alg": "FMIUFS",
             "param": 1
         },
