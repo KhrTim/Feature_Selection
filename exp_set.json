@@ -1,0 +1,51 @@
+{
+    "param_struct": [
+        {
+            "alg": "MGF2WL",
+            "param": [
+                1,
+                1
+            ]
+        },
+        {
+            "alg": "PROPQ",
+            "param": 0
+        },
+        {
+            "alg": "U2FS",
+            "param": 0
+        },
+        {
+            "alg": "MGAGR",
+            "param": [
+                1,
+                1,
+                10,
+                2,
+                1,
+                1
+            ]
+        },
+        {
+            "alg": "EGCFS",
+            "param": [
+                0.001,
+                0.1
+            ]
+        },
+        {
+            "alg": "VCSDFS",
+            "param": 100
+        },
+        {
+            "alg": "JMVFG",
+            "param": [
+                1,
+                1,
+                0.001
+            ]
+        }
+    ],
+    "max_fea": 300,
+    "clus_iter": 50
+}

@@ -1,60 +1,130 @@
 clear;
 data_dir = './data/';
-output_dir = './result/';
+output_dir = './cross_val_results/';
 if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
-file_list = dir('data/*.mat');
-parfor k = 1:length(file_list)
-%for k = 7:7
-    [max_fea, param_struct] = load_expset();
-    fprintf('%d Start\n', k);
-    if exist([output_dir file_list(k).name], 'file')
-        continue;
-    end
-    for m = 1:length(param_struct)
-    %for m = 2:2
-        fea = load([data_dir file_list(k).name], 'fea').fea;
-        gnd = load([data_dir file_list(k).name], 'gnd').gnd;
-        num_c = length(unique(gnd));
-        cate_flag = load([data_dir file_list(k).name], 'cate_flag').cate_flag;  
-        if cate_flag == 0
-            fea = discretize_width(fea, 10);
-        end
-        if size(fea, 2) < max_fea
-            param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(fea, 2));
-        end
-        alg = param_struct(m).alg;
-        if strcmp(alg, 'FMIUFS') == 1
-            fea = normalize(fea);
-        end
-        temp_param = param_struct(m).param;
-        temp_fea = param_struct(m).fea;
-        temp_time = param_struct(m).time;
 
-        for n = 1:size(temp_param, 1)
-           tic
-           idx =  ufs_alg(alg, fea, gnd, max_fea, temp_param(n,:));
-           temp_fea(n, :) = idx;
-           temp_time(n,1) = toc;
-        end
-        param_struct(m).fea = temp_fea;
-        param_struct(m).time = temp_time;
-        fprintf('%s finish\n', alg);
-   
+
+file_list = dir('data/*.mat');
+file_names = {file_list.name};
+
+cross_val = 10;
+
+num_measurements = 3; % Number of measurements per algorithm
+num_algs = 5;
+max_num_features = 10;
+% Preallocate the structure array
+result = struct('dataset_name', cell(length(file_names), 1), ...
+    'algorithms', repmat(struct('name', '', ...
+    'features', NaN(max_num_features, cross_val)), length(file_names), num_algs));
+
+parfor k = 1:length(file_names)
+    fprintf('############# Start dataset %s #############\n', file_list(k).name);
+
+
+
+    result(k).dataset_name = file_list(k).name;
+
+    fprintf('%d Start\n', k);
+    [~, param_struct] = load_expset();
+    max_fea = max_num_features;
+
+
+    orig_fea = load([data_dir file_list(k).name], 'fea').fea;
+    gnd = load([data_dir file_list(k).name], 'gnd').gnd;
+    num_c = length(unique(gnd));
+    cate_flag = load([data_dir file_list(k).name], 'cate_flag').cate_flag;
+    if cate_flag == 0
+        % orig_fea = discretize_width(orig_fea, 10);
+        orig_fea = binarize_by_mean(orig_fea);
+    else
+        orig_fea = one_hot_encode_columns(orig_fea);
     end
-    file_name = file_list(k).name;
-    save_dir = strcat(output_dir, file_name);
-    save_file(save_dir, param_struct);
+
+    for m = 1:length(param_struct)
+        fprintf('----- Start algorithm %s -----\n', param_struct(m).alg);
+
+        exp_path = fullfile(output_dir, file_list(k).name, param_struct(m).alg);
+        if ~exist(exp_path, 'dir')
+            mkdir(exp_path);
+        end
+        fprintf("Checking files in %s directory.\n", exp_path);
+        files = dir(exp_path);
+
+        % Filter out the directories (i.e., include only files)
+        files = files(~[files.isdir]);
+
+        % Count the number of files
+        num_files = length(files);
+        fprintf("%d files found\n", num_files);
+
+        cross_val_iter_num = max(0,cross_val - num_files);
+        fprintf("Setting number of iterations to %d\n", cross_val_iter_num);
+        result(k).algorithms(m).name = param_struct(m).alg;
+
+        if size(orig_fea, 2) < max_fea
+            param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(orig_fea, 2));
+        end
+
+        for split_num = 1:cross_val_iter_num
+            fprintf('Iteration %d\n', split_num);
+            cv = cvpartition(size(orig_fea,1), 'HoldOut', 0.2);
+
+            % Get training and test indices
+            train_idx = training(cv);
+            test_idx = test(cv);
+
+            % Split the dataset
+            train_fea = orig_fea(train_idx, :);
+            train_gnd = gnd(train_idx);
+
+            % test_data = fea(test_idx, :);
+            % test_dabels = gnd(test_idx);
+
+            alg = param_struct(m).alg;
+
+            if strcmp(alg, 'FMIUFS') == 1
+                train_fea = normalize(train_fea);
+            end
+            temp_param = param_struct(m).param;
+            
+            t1 = tic;
+            idx =  ufs_alg(alg, train_fea, train_gnd, max_fea, temp_param(1,:));
+            elapsed_time = toc(t1);
+            result(k).algorithms(m).features(:,split_num) = idx;
+            timestamp = datetime('now', 'Format', 'yyyyMMdd_HHmmss');
+
+            % Convert the timestamp to a string
+            timestamp_str = char(timestamp);
+
+            % Define the base filename
+            base_filename = 'data_file_';
+
+            % Concatenate the base filename with the timestamp string
+            filename = fullfile(exp_path, strcat(base_filename, timestamp_str,'_',string(randi(10000))));
+            X_new = train_fea(:, idx);
+
+            features = result(k).algorithms(m).features(:, split_num);
+            res = uniqueness(X_new);
+            fprintf("Uniqueness: %f\n",res);
+
+            save(filename,"-fromstruct",struct("features", features, "train_subset", train_fea, "time", elapsed_time));
+        end
+    end
+    %file_name = file_list(k).name;
+    %save_dir = strcat(output_dir, file_name);
+    %save_file(save_dir, param_struct);
     fprintf('%d finish\n', k);
 end
+save('FINAL_RESULT.mat', 'result');
 
 function [m, p] = load_expset()
-load("exp_setting.mat");
+load("upd.mat");
 m = max_fea;
 p = param_struct;
 end
 
 function save_file(save_dir, param_struct)
-    save(save_dir, 'param_struct');
+save(save_dir, 'param_struct');
 end
