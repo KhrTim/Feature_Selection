@@ -23,48 +23,6 @@ switch name
         % c no. of classes
         [~,idx]=sort(v,'descend');
         % idx is the feature index sorted in decending order
-    case 'CDMVFS'
-        % param = [alpha, beta, gamma, num_views]
-        alpha = param(1);
-        beta = param(2);
-        gamma = param(3);
-        v = param(4);  % number of views to split into
-        
-        n = size(X, 1); % number of samples
-        d = size(X, 2); % total number of features
-        class_num = c_num;
-
-        % Ensure divisible feature size (or truncate last few features)
-        view_size = floor(d / v);
-        fea = cell(1, v);
-        for i = 1:v
-            start_idx = (i - 1) * view_size + 1;
-            if i == v
-                end_idx = d; % take remaining features
-            else
-                end_idx = i * view_size;
-            end
-            fea{i} = X(:, start_idx:end_idx);
-        end
-
-        % Call CDMvFS
-        [P, ~] = CDMvFS(fea, alpha, beta, gamma, n, v, class_num);
-
-        % Merge projections
-        allP = [];
-        for num = 1:v
-            allP = [allP; P{num}];
-        end
-
-        % Score features using L2 norm
-        W1 = vecnorm(allP, 2, 2);  % efficient row-wise norm
-        [~, index] = sort(W1, 'descend');
-        idx = index(1:m);
-    case 'TRCA_CGL'
-        [score] = TRCA_CGL(X, X_fea, view_num, N, d, c_num, params);
-        [~, index] = sort(score,'descend');
-        selecteddata = X_fea(:, index(1 : feaRange(j)));
-
     case 'JMVFG'
         eta = param(1);
         gamma = param(2);
