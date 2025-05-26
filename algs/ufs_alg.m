@@ -14,7 +14,7 @@ switch name
         [n, d] = size(X);
         class_num = c_num; 
         r = class_num; 
-        l = 20; NIter = 50;
+        NIter = 10;
         W = rand(d, class_num);
         H = rand(class_num, d);
         G = rand(class_num, r);
@@ -26,8 +26,8 @@ switch name
         gamma = param(4);
 
         % Run
-        [X_new, id]= SLNMF(class_num, X, W, H, G, alpha, beta, beta1, gamma, r, l, NIter);
-        idx = id(1:m);
+        [X_new, idx]= SLNMF(class_num, X, W, H, G, alpha, beta, beta1, gamma, r, m, NIter);
+        % l was 20 and i selected m feat from those
     case 'GRSSLSF'
         B = eye(size(X,2));           % Identity basis
         BB = (B')*B;
@@ -38,7 +38,7 @@ switch name
         alpha = param(1);
         beta = param(2);
         gamma = param(3);
-        itermax = 30;
+        itermax = 20;
 
         idx = GRSSLFS(X, BB, BX, P, A, alpha, beta, gamma, m, itermax);
     case 'RAFG'
@@ -62,7 +62,7 @@ switch name
         alpha = param(1);        % balance between reconstruction and projection
         beta = param(2);        % sparsity regularization
         gamma = param(3);        % graph regularization
-        NITER = 2;         % number of iterations
+        NITER = 10;         % number of iterations
         group_num = 5;      % divide features into 5 groups
         sigma = param(4);        % Gaussian similarity bandwidth
 
@@ -87,8 +87,8 @@ switch name
         lambda2 = param(2);
         lambda3 = param(3);%1;
         lambda4 = param(4);%1e-3;
-        ITER1 = 30;
-        ITER2 = 5;
+        ITER1 = 50;
+        ITER2 = 50;
 
         [~, feature_idx] = RUSLP(X, m, W, F, G, L, lambda1, lambda2, lambda3, lambda4, ITER1, ITER2);
 
@@ -99,7 +99,7 @@ switch name
         [b,~,~] = UFS2(X,c_num,param(1),m);
         idx = find(b == 1);
     case 'FSDK'
-        [~,~,~,idx,~,~] = FSDK(X,c_num,m,param(1),param(2));
+        [~,~,~,idx,~,~] = FSDK(X,c_num,m); % call with default params
     case 'DFGOC'
         % problem with params
         XTX = X' * X;

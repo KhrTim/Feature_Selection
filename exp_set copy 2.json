@@ -5,14 +5,6 @@
             "param": 0
         },
         {
-            "alg": "LRPFS",
-            "param": [
-                1,
-                1,
-                5
-            ]
-        },
-        {
             "alg": "FSDK",
             "param": [
                 5,
@@ -49,13 +41,6 @@
         },
         {
             "alg": "MAX_VAR",
-            "param": [
-                1,
-                1
-            ]
-        },
-        {
-            "alg": "MSFS",
             "param": [
                 1,
                 1
@@ -99,14 +84,7 @@
             ]
         },
         {
-            //package required
-            "alg": "RUFS",
-            "param": [
-                1,
-                1
-            ]
-        },
-        {
+            // problem
             "alg": "RSOBC",
             "param": [
                 1,
@@ -152,7 +130,6 @@
             ]
         },
         {
-            // same problem
             "alg": "UFS2",
             "param": [
                 0.1
@@ -165,6 +142,7 @@
                 0.1,0.1,1
             ]
         },{
+            // same problem
             "alg": "SSDS",
             "param": [
                 0.1,

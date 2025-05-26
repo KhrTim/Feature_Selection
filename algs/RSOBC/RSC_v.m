@@ -1,4 +1,5 @@
 function [obj, W,obj_w] = RSC_v(X, c, alpha, beta)
+% Robust sparse orthogonal basis clustering for unsupervised feature selectio
 %% Input and output:
 % [Input]
 % X: the data matrix
