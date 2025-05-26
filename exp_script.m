@@ -19,7 +19,7 @@ result = struct('dataset_name', cell(length(file_names), 1), ...
     'algorithms', repmat(struct('name', '', ...
     'features', NaN(max_num_features, cross_val)), length(file_names), num_algs));
 
-for k = 1:length(file_names)
+parfor k = 1:length(file_names)
     fprintf('############# Start dataset %s #############\n', file_list(k).name);
 
 
