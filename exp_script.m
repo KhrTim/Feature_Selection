@@ -12,14 +12,14 @@ file_names = {file_list.name};
 cross_val = 10;
 
 num_measurements = 3; % Number of measurements per algorithm
-num_algs = 5;
+num_algs = 10;
 max_num_features = 10;
 % Preallocate the structure array
 result = struct('dataset_name', cell(length(file_names), 1), ...
     'algorithms', repmat(struct('name', '', ...
     'features', NaN(max_num_features, cross_val)), length(file_names), num_algs));
 
-parfor k = 1:length(file_names)
+for k = 1:length(file_names)
     fprintf('############# Start dataset %s #############\n', file_list(k).name);
 
 
@@ -27,7 +27,7 @@ parfor k = 1:length(file_names)
     result(k).dataset_name = file_list(k).name;
 
     fprintf('%d Start\n', k);
-    [~, param_struct] = load_expset();
+    [~, param_struct] = load_expset('real_experiment.json');
     max_fea = max_num_features;
 
 
@@ -90,7 +90,7 @@ parfor k = 1:length(file_names)
             temp_param = param_struct(m).param;
             
             t1 = tic;
-            idx =  ufs_alg(alg, train_fea, train_gnd, max_fea, temp_param(1,:));
+            idx =  ufs_alg(alg, train_fea, train_gnd, max_fea, temp_param);
             elapsed_time = toc(t1);
             result(k).algorithms(m).features(:,split_num) = idx;
             timestamp = datetime('now', 'Format', 'yyyyMMdd_HHmmss');
@@ -119,10 +119,10 @@ parfor k = 1:length(file_names)
 end
 save('FINAL_RESULT.mat', 'result');
 
-function [m, p] = load_expset()
-load("upd.mat");
-m = max_fea;
-p = param_struct;
+function [m, p] = load_expset(filename)
+s = loadStructFromJSON(filename);
+m = s.max_fea;
+p = s.param_struct;
 end
 
 function save_file(save_dir, param_struct)
