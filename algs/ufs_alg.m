@@ -63,7 +63,7 @@ switch name
         beta = param(2);        % sparsity regularization
         gamma = param(3);        % graph regularization
         NITER = 10;         % number of iterations
-        group_num = 5;      % divide features into 5 groups
+        group_num = 4;      % divide features into 5 groups
         sigma = param(4);        % Gaussian similarity bandwidth
 
         % Call the SSDS function
