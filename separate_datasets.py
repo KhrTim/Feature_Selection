@@ -42,10 +42,10 @@ def distribute_by_column_count(
         try:
             if dst.exists() or dst.is_symlink():
                 dst.unlink()
-            os.symlink(src.resolve(), dst)
-            print(f"Symlinked: {src} -> {dst}")
+            shutil.copy(src, dst)
+            print(f"Copied: {src} -> {dst}")
         except Exception as e:
-            print(f"Failed to symlink {src}: {e}")
+            print(f"Failed to copy {src}: {e}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
