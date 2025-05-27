@@ -36,16 +36,17 @@ def distribute_by_column_count(
     output_path.mkdir(parents=True, exist_ok=True)
 
     for fname in machine_files:
+        fname = fname + '.mat'
         src = Path(source_dir) / fname
         dst = output_path / fname
 
         try:
             if dst.exists() or dst.is_symlink():
                 dst.unlink()
-            shutil.copy(src, dst)
-            print(f"Copied: {src} -> {dst}")
+            os.symlink(src.resolve(), dst)
+            print(f"Symlinked: {src} -> {dst}")
         except Exception as e:
-            print(f"Failed to copy {src}: {e}")
+            print(f"Failed to symlink {src}: {e}")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
