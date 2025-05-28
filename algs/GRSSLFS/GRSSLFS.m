@@ -33,7 +33,7 @@ BBG = G*BB;
 NoG = BX + alpha * BBG * A + VU * BB;
 DeG = BBG+alpha*BBG*P+BBG*(VU')*VU;
 re1 = rdivide(NoG,DeG);
-G = G.*nthroot(re1,2);
+G = G.*nthroot(abs(re1),2);
 
 %------------ Update U
 GBB = BB*(G');
