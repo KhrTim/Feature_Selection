@@ -209,6 +209,8 @@ switch name
         idx = vcsdfs(X, param(1), m, 100);
         idx = idx(1:m, 1);
         idx = idx';
+    case 'PROPS'
+        idx = transpose(proposed_fd(X, m));
     case 'PROP'
         idx = transpose(proposed(X, m));
     case 'PROPQ'
