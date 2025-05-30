@@ -109,7 +109,7 @@ parfor k = 1:length(file_names)
             res = uniqueness(X_new);
             fprintf("Uniqueness: %f\n",res);
 
-            save(filename,"-fromstruct",struct("features", features, "train_subset", train_fea, "time", elapsed_time));
+            save(filename,"-fromstruct",struct("features", features, "train_subset", train_fea, "time", elapsed_time, "train_idx", train_idx, 'train_gnd', train_gnd));
         end
     end
     %file_name = file_list(k).name;
