@@ -54,7 +54,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     machine_index = int(sys.argv[1])
-    num_machines = 3  # Adjust as needed
+    num_machines = 4  # Adjust as needed
 
     df = pd.read_csv("aggregated_dataset_info.csv")  # Must contain 'Dataset' and 'preprocessed_cols'
 
