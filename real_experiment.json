@@ -7,6 +7,50 @@
         {
             "alg": "PROP_REV",
             "param": -1
+        },
+        {
+            "alg": "MAX_VAR",
+            "param": -1
+        },
+        {
+            "alg": "LS",
+            "param": -1
+        },
+        {
+            "alg": "EGCFS",
+            "param": [
+                0.001,
+                0.1
+            ]
+        },
+        {
+            "alg": "PROPQ",
+            "param": 0
+        },
+        {
+            "alg": "VCSDFS",
+            "param": 100
+        },
+        {
+            "alg": "RUSLP",
+            "param": [
+                0.01,
+                100,
+                100,
+                1
+            ]
+        },
+        {
+            "alg": "FSDK",
+            "param": -1
+        },
+        {
+            "alg": "GRSSLSF",
+            "param": [
+                1,
+                1,
+                100
+            ]
         }
     ],
     "max_fea": 300,
