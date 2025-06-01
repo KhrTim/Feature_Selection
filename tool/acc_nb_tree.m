@@ -11,7 +11,7 @@ acc_tree = zeros(10, 1);
 for i = 1:10
     test = (sim_seq == i);
     train = ~test;
-    nb = fitcnb(X(train, :), Y(train), 'DistributionNames', 'mvmn');
+    nb = fitcnb(X(train, :), Y(train), 'DistributionNames', 'mvmn', 'CategoricalPredictors', 'all');
     tree = fitctree(X(train, :), Y(train));
     pred = predict(nb, X(test, :));
     acc_nb(i) = sum(pred == Y(test)) / length(Y(test));

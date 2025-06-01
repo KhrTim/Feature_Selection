@@ -21,8 +21,8 @@ for i = 1:length(datasets)
                 mat_files = dir(fullfile(algorithm_path, '*.mat'));
                 
                 % Preallocate storage for evaluations
-                eval_metrics = struct('gini', [], 'uniqueness', [], 'ent_rat', [], 'time', [], 'nmi',[], 'table_acc_nb',[],'table_acc_nb_s',[],...
-                    'table_acc_tree',[],'table_acc_tree_s',[]);
+                eval_metrics = struct('gini', [], 'uniqueness', [], 'ent_rat', [], 'time', [], 'nmi',[], 'table_acc_nb',[],...
+                    'table_acc_tree',[]);
                 
                 for k = 1:length(mat_files)
                     file_path = fullfile(algorithm_path, mat_files(k).name);
@@ -39,7 +39,7 @@ for i = 1:length(datasets)
                     % disp(train_samples);
                     idx = data.features;
                     X_new = train_samples(:, idx);
-                    train_gnd = gnd(train_samples);
+                    train_gnd = data.train_gnd;
 
 
 
@@ -48,7 +48,7 @@ for i = 1:length(datasets)
                     ent = ent_s(X_new) / ent_s(train_samples);
                     t = data.time;
                     
-                    [table_acc_nb, table_acc_nb_s, table_acc_tree, table_acc_tree_s] = acc_nb_tree(X_new, train_gnd);
+                    [table_acc_nb, ~, table_acc_tree, ~] = acc_nb_tree(X_new, train_gnd);
                     nmi = nmi_s(X_new, train_gnd);
 
                     % Collect results
@@ -58,9 +58,7 @@ for i = 1:length(datasets)
                     eval_metrics.time(end+1) = t;
                     eval_metrics.nmi(end+1) = nmi;
                     eval_metrics.table_acc_nb(end+1) = table_acc_nb;
-                    eval_metrics.table_acc_nb_s(end+1) =  table_acc_nb_s;
                     eval_metrics.table_acc_tree(end+1) = table_acc_tree;
-                    eval_metrics.table_acc_tree_s(end+1) = table_acc_tree_s;
 
 
 
