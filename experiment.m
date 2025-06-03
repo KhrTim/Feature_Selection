@@ -1,6 +1,6 @@
 clear;
 data_dir = './data/';
-output_dir = './cross_val_results/';
+output_dir = './cross_val_results_50/';
 if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
@@ -13,7 +13,7 @@ cross_val = 10;
 
 num_measurements = 3; % Number of measurements per algorithm
 num_algs = 10;
-max_num_features = 10;
+max_num_features = 50;
 % Preallocate the structure array
 result = struct('dataset_name', cell(length(file_names), 1), ...
     'algorithms', repmat(struct('name', '', ...
