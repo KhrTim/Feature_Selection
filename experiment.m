@@ -11,8 +11,8 @@ file_names = {file_list.name};
 
 cross_val = 10;
 
-num_measurements = 3; % Number of measurements per algorithm
-num_algs = 10;
+
+num_algs = 11;
 max_num_features = 50;
 % Preallocate the structure array
 result = struct('dataset_name', cell(length(file_names), 1), ...
@@ -106,8 +106,6 @@ parfor k = 1:length(file_names)
             X_new = train_fea(:, idx);
 
             features = result(k).algorithms(m).features(:, split_num);
-            res = uniqueness(X_new);
-            fprintf("Uniqueness: %f\n",res);
 
             save(filename,"-fromstruct",struct("features", features, "train_subset", train_fea, "time", elapsed_time, "train_idx", train_idx, 'train_gnd', train_gnd));
         end
