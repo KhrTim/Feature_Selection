@@ -42,18 +42,6 @@
             ]
         },
         {
-            "alg": "PROPS",
-            "param": -1
-        },
-        {
-            "alg": "PROP_REV",
-            "param": -1
-        },
-        {
-            "alg": "PROPQ",
-            "param": 0
-        },
-        {
             "alg": "RUSLP",
             "param": [
                 0.01,
