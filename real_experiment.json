@@ -19,13 +19,6 @@
             "param": 0
         },
         {
-            "alg": "RUFS",
-            "param": [
-                1,
-                1
-            ]
-        },
-        {
             "alg": "EGCFS",
             "param": [
                 0.001,
