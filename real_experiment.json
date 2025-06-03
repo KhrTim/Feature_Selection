@@ -53,6 +53,18 @@
         {
             "alg": "FSDK",
             "param": -1
+        },
+        {
+            "alg": "PROP",
+            "param": -1
+        },
+        {
+            "alg": "PROP_REV",
+            "param": -1
+        },
+        {
+            "alg": "PROPS",
+            "param": -1
         }
     ],
     "max_fea": 300,
