@@ -19,7 +19,7 @@ result = struct('dataset_name', cell(length(file_names), 1), ...
     'algorithms', repmat(struct('name', '', ...
     'features', NaN(max_num_features, cross_val)), length(file_names), num_algs));
 
-parfor k = 1:length(file_names)
+for k = 1:length(file_names)
     fprintf('############# Start dataset %s #############\n', file_list(k).name);
 
 
@@ -63,9 +63,7 @@ parfor k = 1:length(file_names)
         fprintf("Setting number of iterations to %d\n", cross_val_iter_num);
         result(k).algorithms(m).name = param_struct(m).alg;
 
-        if size(orig_fea, 2) < max_fea
-            param_struct(m).fea = zeros(size(param_struct(m).param, 1), size(orig_fea, 2));
-        end
+     
 
         for split_num = 1:cross_val_iter_num
             fprintf('Iteration %d\n', split_num);
@@ -90,8 +88,18 @@ parfor k = 1:length(file_names)
             temp_param = param_struct(m).param;
             
             t1 = tic;
+            disp("Start");
             idx =  ufs_alg(alg, train_fea, train_gnd, max_fea, temp_param);
             elapsed_time = toc(t1);
+            disp("End");
+            
+            % If the number of selected features is greater than
+            % number of features in dataset, pad with NaN
+            if length(idx) < max_fea
+                idx(end+1:max_fea) = NaN;
+            elseif length(idx) > max_fea
+                idx = idx(1:max_fea);
+            end
             result(k).algorithms(m).features(:,split_num) = idx;
             timestamp = datetime('now', 'Format', 'yyyyMMdd_HHmmss');
 
@@ -103,8 +111,7 @@ parfor k = 1:length(file_names)
 
             % Concatenate the base filename with the timestamp string
             filename = fullfile(exp_path, strcat(base_filename, timestamp_str,'_',string(randi(10000))));
-            X_new = train_fea(:, idx);
-
+            % idx = idx(~isnan(idx) & idx > 0 & idx <= size(train_fea, 2));
             features = result(k).algorithms(m).features(:, split_num);
 
             save(filename,"-fromstruct",struct("features", features, "train_subset", train_fea, "time", elapsed_time, "train_idx", train_idx, 'train_gnd', train_gnd));

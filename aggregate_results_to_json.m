@@ -38,6 +38,9 @@ for i = 1:length(datasets)
                     train_samples = data.train_subset;
                     % disp(train_samples);
                     idx = data.features;
+                    % If the number of selected features is greater than
+                    % number of features in dataset, it is padded with NaNs
+                    idx = idx(~isnan(idx) & idx > 0 & idx <= size(train_fea, 2));
                     X_new = train_samples(:, idx);
                     train_gnd = data.train_gnd;
 
