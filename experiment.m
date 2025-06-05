@@ -88,10 +88,8 @@ for k = 1:length(file_names)
             temp_param = param_struct(m).param;
             
             t1 = tic;
-            disp("Start");
             idx =  ufs_alg(alg, train_fea, train_gnd, max_fea, temp_param);
             elapsed_time = toc(t1);
-            disp("End");
             
             % If the number of selected features is greater than
             % number of features in dataset, pad with NaN

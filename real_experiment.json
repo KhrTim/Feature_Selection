@@ -1,8 +1,63 @@
 {
     "param_struct": [
         {
-            "alg": "RUFS",
-            "param":[1,1]
+            "alg": "UDFS",
+            "param": [
+                1,
+                1
+            ]
+        },
+        {
+            "alg": "NDFS",
+            "param": [
+                1,
+                1
+            ]
+        },
+        {
+            "alg": "MCFS",
+            "param": 0
+        },
+        {
+            "alg": "EGCFS",
+            "param": [
+                0.001,
+                0.1
+            ]
+        },
+        {
+            "alg": "CNAFS",
+            "param": [
+                1,
+                1,
+                1,
+                1
+            ]
+        },
+        {
+            "alg": "RUSLP",
+            "param": [
+                0.01,
+                100,
+                100,
+                1
+            ]
+        },
+        {
+            "alg": "FSDK",
+            "param": -1
+        },
+        {
+            "alg": "PROP",
+            "param": -1
+        },
+        {
+            "alg": "PROP_REV",
+            "param": -1
+        },
+        {
+            "alg": "PROPS",
+            "param": -1
         }
     ],
     "max_fea": 300,
