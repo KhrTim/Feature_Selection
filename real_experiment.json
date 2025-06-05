@@ -58,7 +58,15 @@
         {
             "alg": "PROPS",
             "param": -1
+        },
+	{
+            "alg": "RUFS",
+            "param": [
+                1,
+                1
+            ]
         }
+
     ],
     "max_fea": 300,
     "clus_iter": 50
