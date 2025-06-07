@@ -1,0 +1,31 @@
+{
+    "param_struct": [
+        {
+            "alg": "UDFS",
+            "param": [
+                0.001,
+                0.001
+            ]
+        },
+        {
+            "alg": "NDFS",
+            "param": [
+                1000,
+                1
+            ]
+        },
+        {
+            "alg": "MCFS",
+            "param": 0
+        },
+        {
+            "alg": "RUFS",
+            "param": [
+                100,
+                100
+            ]
+        }
+    ],
+    "max_fea": 300,
+    "clus_iter": 50
+}

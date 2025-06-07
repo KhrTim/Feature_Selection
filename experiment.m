@@ -1,6 +1,6 @@
 clear;
 data_dir = './data/';
-output_dir = './cross_val_results_50/';
+output_dir = './cross_val_results_add/';
 if ~exist(output_dir, 'dir')
     mkdir(output_dir);
 end
@@ -27,7 +27,7 @@ for k = 1:length(file_names)
     result(k).dataset_name = file_list(k).name;
 
     fprintf('%d Start\n', k);
-    [~, param_struct] = load_expset('real_experiment.json');
+    [~, param_struct] = load_expset('additional_exp.json');
     max_fea = max_num_features;
 
 

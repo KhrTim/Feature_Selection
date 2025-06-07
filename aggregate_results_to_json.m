@@ -1,6 +1,7 @@
-base_dir = 'cross_val_results'; % CHANGE THIS
+base_dir = 'cross_val_results_50'; % CHANGE THIS
 datasets = dir(base_dir);
 results = struct();
+num_features_for_classifiers = 20;
 
 for i = 1:length(datasets)
     dataset_name = datasets(i).name;
@@ -40,7 +41,10 @@ for i = 1:length(datasets)
                     idx = data.features;
                     % If the number of selected features is greater than
                     % number of features in dataset, it is padded with NaNs
-                    idx = idx(~isnan(idx) & idx > 0 & idx <= size(train_fea, 2));
+                    idx = idx(~isnan(idx) & idx > 0 & idx <= size(train_samples, 2));
+                    if num_features_for_classifiers > 0
+                        idx = idx(1:min(num_features_for_classifiers, length(idx)));
+                    end
                     X_new = train_samples(:, idx);
                     train_gnd = data.train_gnd;
 
@@ -52,6 +56,8 @@ for i = 1:length(datasets)
                     t = data.time;
                     
                     [table_acc_nb, ~, table_acc_tree, ~] = acc_nb_tree(X_new, train_gnd);
+                    % table_acc_tree = 1;
+                    % table_acc_nb = 1;
                     nmi = nmi_s(X_new, train_gnd);
 
                     % Collect results
@@ -90,5 +96,4 @@ for i = 1:length(datasets)
 end
 
 % Optionally save the results
-saveStructAsJSON('final',results);
-save('evaluation_results.mat', 'results');
+saveStructAsJSON('evaluation_results_20',results);
