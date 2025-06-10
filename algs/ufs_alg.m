@@ -190,6 +190,7 @@ switch name
         idx = idx';
     case 'RUFS'
         % cant download the package
+	X = zscore(X);
         idx = RUFS(X, c_num, param(1), param(2));
         idx = idx(1:m, 1);
         idx = idx';
